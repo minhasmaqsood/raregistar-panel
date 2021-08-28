@@ -1130,6 +1130,126 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
+"@hawk-ui/button@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/button/-/button-3.1.2.tgz#7952f98bc3418af8041d429431d9dcde80bfaaf3"
+  integrity sha512-AcM1GqjiIDoLRPkkUGogZyYIYNSvL/IkiGpVkbFZD4BrWORBM+sj2WB+dJ7gc/XQwctMMga1y+QMvBsc3+BGGw==
+  dependencies:
+    classnames "^2.2.6"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+
+"@hawk-ui/color-picker@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/color-picker/-/color-picker-3.1.2.tgz#2e3ccfab456160ad4751085ae4f7f1a25ea95277"
+  integrity sha512-pKBBrAPcNxXpxoXAF6aHlkkvMBaakzMPhS1z3MfiJPOy4q0D/9JXUEpalKmScvDfmEa57r1d0fscFol/AIL+JQ==
+  dependencies:
+    "@hawk-ui/button" "^3.1.2"
+    "@hawk-ui/input" "^3.1.2"
+    "@hawk-ui/input-group" "^3.1.2"
+    clamp "^1.0.1"
+    color "^3.1.2"
+    color-string "^1.5.3"
+    lodash "^4.17.20"
+    prop-types "^15.7.2"
+    react-themeable "^1.1.0"
+
+"@hawk-ui/dropdown@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/dropdown/-/dropdown-3.1.2.tgz#2fb7ac7864f26b682e4eec1239fe470fa42d78ab"
+  integrity sha512-E82+pGNV2ea974oyOE+z4F9XGCKlRhHqhexQv4fuaF6CkVnQnK1RfrpkwL35zWde6hKoHh64zZ/K4RItVTzXhg==
+  dependencies:
+    "@hawk-ui/button" "^3.1.2"
+    classnames "^2.2.6"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+
+"@hawk-ui/file-upload@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/file-upload/-/file-upload-3.1.2.tgz#f8bfc97eae82516b256112da6cf625b0f2a5797b"
+  integrity sha512-WAgBE9ayoKX+LpuyPMu9bf2YvI8vdtXsJixkoKtXI26zFbRxRHACPkCn/oYWI2tJLr3XFuFBFhluy0JApPjfaw==
+  dependencies:
+    "@hawk-ui/button" "^3.1.2"
+    "@hawk-ui/input" "^3.1.2"
+    classnames "^2.2.6"
+    lodash "^4.17.19"
+    prop-types "^15.7.2"
+
+"@hawk-ui/input-group@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/input-group/-/input-group-3.1.2.tgz#1fbb63cc3e850ad9c41c2dbe4f462c9e7fc6b648"
+  integrity sha512-87i1YeDLRnk47Ppv2tGrG4LnekVuqRzaiP3/FMKFeH0XDj7I/e7Iri6hj+bV34MeVZ/kCq85+SpJkdi+X7Q3Rg==
+  dependencies:
+    "@hawk-ui/button" "^3.1.2"
+    "@hawk-ui/input" "^3.1.2"
+    lodash "^4.17.19"
+    prop-types "^15.7.2"
+
+"@hawk-ui/input@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/input/-/input-3.1.2.tgz#240bfba458050cd6dfcbd19b901b1e67fc267a47"
+  integrity sha512-y4HrLqzJygLZiMO7mXrmyBxACbx9cN5AwAMxYpr8eSpC3eRNmFyntlZzCJmyorZizxFJpG0aJp9tWY3BOuiuJQ==
+  dependencies:
+    "@hawk-ui/label" "^3.1.2"
+    "@hawk-ui/tooltip" "^3.1.2"
+    classnames "^2.2.6"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+
+"@hawk-ui/label@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/label/-/label-3.1.2.tgz#8d97ce320e1b703ed425fde9cce8e74d171d1839"
+  integrity sha512-jVvnutoXw4Vi7VCsA1LlXSKyYhd/OZYW8W6fOz9TJhNlbfyFzV+FpffBoZ+tYyXvlE0jG6S4gcnD/HUXAkr9iQ==
+  dependencies:
+    classnames "^2.2.6"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+
+"@hawk-ui/modal@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/modal/-/modal-3.1.2.tgz#071c66034036717b774ef9fa6b35d67625e39a26"
+  integrity sha512-olhBq0TdhgKo0+UfY2yNjC0uizOE26tFb/4JYQ3ndG7Inrf9bW7A1kyFyQ+fPGFGyFHFXLQtYtRVtUcuTCrzmw==
+  dependencies:
+    classnames "^2.2.6"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+
+"@hawk-ui/resizable@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/resizable/-/resizable-3.1.2.tgz#a0aca86a9c79aad83fc1953b5f3a4530d376d994"
+  integrity sha512-1TuIbnw5cXa5PHf7PzDiGzlOfyV/SamMFf9og+iJyfrQGaINvHAoaw2zy5zuL4shD8KmkhJSuQhGK4nC99bvaQ==
+  dependencies:
+    "@hawk-ui/button" "^3.1.2"
+    "@hawk-ui/tooltip" "^3.1.2"
+    classnames "^2.2.6"
+    lodash "^4.17.19"
+    prop-types "^15.7.2"
+
+"@hawk-ui/rich-text-editor@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/rich-text-editor/-/rich-text-editor-3.1.2.tgz#b60d5db23d46eaa8f137ab9b615937c85f0da197"
+  integrity sha512-b7zVtKg6dJROV5LByLlEnrQ0bjrwy620uFPM2dQFrrmjMCDh8o0XZ+SIiKw8uhOsIBTF6pzXGO+8xQrsOo4/qw==
+  dependencies:
+    "@hawk-ui/button" "^3.1.2"
+    "@hawk-ui/color-picker" "^3.1.2"
+    "@hawk-ui/dropdown" "^3.1.2"
+    "@hawk-ui/file-upload" "^3.1.2"
+    "@hawk-ui/input" "^3.1.2"
+    "@hawk-ui/modal" "^3.1.2"
+    "@hawk-ui/resizable" "^3.1.2"
+    classnames "^2.2.6"
+    lodash "^4.17.19"
+    prop-types "^15.7.2"
+
+"@hawk-ui/tooltip@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@hawk-ui/tooltip/-/tooltip-3.1.2.tgz#cb58886ba7e6adafd2ee1bf460ff62fa7c643e77"
+  integrity sha512-XzHARkXhP0NkaFCCQ4zImV2gHA56sP7ShxG6f6Q/ozXhDlZ1aE16vuMN+s03h0UcEZ4T73xsDZzox/igVRpdfA==
+  dependencies:
+    classnames "^2.2.6"
+    lodash "^4.17.15"
+    prop-types "^15.7.2"
+
 "@icons/material@^0.2.4":
   version "0.2.4"
   resolved "https://registry.yarnpkg.com/@icons/material/-/material-0.2.4.tgz#e90c9f71768b3736e76d7dd6783fc6c2afa88bc8"
@@ -3138,6 +3258,11 @@ cipher-base@^1.0.0, cipher-base@^1.0.1, cipher-base@^1.0.3:
     inherits "^2.0.1"
     safe-buffer "^5.0.1"
 
+clamp@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/clamp/-/clamp-1.0.1.tgz#66a0e64011816e37196828fdc8c8c147312c8634"
+  integrity sha1-ZqDmQBGBbjcZaCj9yMjBRzEshjQ=
+
 class-utils@^0.3.5:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/class-utils/-/class-utils-0.3.6.tgz#f93369ae8b9a7ce02fd41faad0ca83033190c463"
@@ -3293,6 +3418,14 @@ color-string@^1.5.2:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
+color-string@^1.5.3, color-string@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.6.0.tgz#c3915f61fe267672cb7e1e064c9d692219f6c312"
+  integrity sha512-c/hGS+kRWJutUBEngKKmk4iH3sD59MBkoxVapS/0wgpCz2u7XsNloxknyvBhzwEs1IbV36D9PwqLPJ2DTu3vMA==
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
+
 color@^3.0.0:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/color/-/color-3.1.2.tgz#68148e7f85d41ad7649c5fa8c8106f098d229e10"
@@ -3300,6 +3433,14 @@ color@^3.0.0:
   dependencies:
     color-convert "^1.9.1"
     color-string "^1.5.2"
+
+color@^3.1.2:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/color/-/color-3.2.1.tgz#3544dc198caf4490c3ecc9a790b54fe9ff45e164"
+  integrity sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==
+  dependencies:
+    color-convert "^1.9.3"
+    color-string "^1.6.0"
 
 combined-stream@^1.0.6, combined-stream@~1.0.6:
   version "1.0.8"
@@ -7273,6 +7414,11 @@ lodash.uniq@^4.5.0:
   version "4.17.15"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
   integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+
+lodash@^4.17.19, lodash@^4.17.20:
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
+  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
 loglevel@^1.6.6:
   version "1.6.8"
