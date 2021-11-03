@@ -147,8 +147,17 @@ export default class VIPSignals extends Component {
                                             }}
                                         </Cell>
                                     </Column>
-                                    <Column minWidth={200}  flexGrow={1} align="center">
-                                        <HeaderCell>Opened Date</HeaderCell>
+                                    <Column minWidth={200} flexGrow={1} align="center">
+                                        <HeaderCell>Total Questions</HeaderCell>
+                                        <Cell>
+                                            {(rowData) => {
+                                                return <span>{rowData.questions.length} </span>
+                                            }}
+                                        </Cell>
+                                    </Column>
+
+                                    <Column minWidth={200} flexGrow={1} align="center">
+                                        <HeaderCell>Type</HeaderCell>
                                         <Cell>
                                             {(rowData, rowIndex) => {
                                                 return <span>{moment(rowData.openDate).format('MMMM Do YYYY, h:mm:ss a')}</span>
