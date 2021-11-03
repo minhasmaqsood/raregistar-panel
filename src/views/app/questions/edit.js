@@ -16,7 +16,7 @@ import Breadcrumb from "../../../containers/navs/Breadcrumb";
 import ApiCall from '../../../config/network';
 import Url from '../../../config/api';
 import { NotificationManager } from "../../../components/common/react-notifications";
-import { config } from "../../../config/env";
+import { config, multipartConfig } from "../../../config/env";
 import { ChromePicker } from 'react-color';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -94,59 +94,46 @@ export default class UpdateSignal extends Component {
   componentDidMount() {
     this._isUnmounted = false;
     this.getSignalData();
+    this.getAllAges();
+    this.getAllCategories();
   }
   componentWillUnmount() {
     this._isUnmounted = true;
   }
-  getSignalData = async () => {
-    if (!this._isUnmounted) {
-      let response = await ApiCall.get(`${Url.VIP_SIGNAL_EDIT}/${this.props.match.params.id}`, await config());
-      // console.log(response)
-
+  getAllAges = async () => {
+    this.setState({ spinning: true });
+    if (!this._isMounted) {
+      let response = await ApiCall.get(Url.ALL_AGE, await config())
+      if (response.status === 200) {
+        this.setState({ ages: response.data.ages.reverse(), spinning: false });
+      }
+    }
+  };
+  getAllCategories = async () => {
+    this.setState({ spinning: true });
+    if (!this._isMounted) {
+      let response = await ApiCall.get(Url.ALL_CATEGORY, await config())
 
       if (response.status === 200) {
-        let detailedTextFrench;
-        let detailedTextDutch;
-        let frenchId;
-        let dutchId;
-        if (response.data.signal.translations.length === 0) {
-          detailedTextFrench = ''
-          detailedTextDutch = ''
-        } else if (response.data.signal.translations.length === 1) {
-          if (response.data.signal.translations.filter(item => item.language.name === 'French').length > 0) {
-            detailedTextFrench = response.data.signal.translations.filter(item => item.language.name === 'French')[0].body[0].description;
-            frenchId = response.data.signal.translations.filter(item => item.language.name === 'French')[0].id;
-          } else if (response.data.signal.translations.filter(item => item.language.name === 'Dutch').length > 0) {
-            detailedTextDutch = response.data.signal.translations.filter(item => item.language.name === 'Dutch')[0].body[0].description;
-            dutchId = response.data.signal.translations.filter(item => item.language.name === 'Dutch')[0].id;
-          }
-        } else if (response.data.signal.translations.length === 2) {
-          detailedTextFrench = response.data.signal.translations.filter(item => item.language.name === 'French')[0].body[0].description;
-          detailedTextDutch = response.data.signal.translations.filter(item => item.language.name === 'Dutch')[0].body[0].description;
-          frenchId = response.data.signal.translations.filter(item => item.language.name === 'French')[0].id;
-          dutchId = response.data.signal.translations.filter(item => item.language.name === 'Dutch')[0].id;
-        }
+        this.setState({ categories: response.data.categories.reverse(), spinning: false });
+      }
+    }
+  };
+  getSignalData = async () => {
+    if (!this._isUnmounted) {
+      let response = await ApiCall.get(`${Url.SINGLE_QUESTION}/${this.props.match.params.id}`, await config());
+      // console.log(response)
+      if (response.status === 200) {
+        // debugger
         this.setState({
-          title: response.data.signal.title,
-          subtitle: response.data.signal.subTitle,
-          entryPoint: response.data.signal.entryPoint,
-          isOpened: response.data.signal.isOpened,
-          openedDateTime: moment(response.data.signal.openDate),
-          tradesList: response.data.signal.details,
-          id: response.data.signal.id,
-          translations: response.data.signal.translations,
-          detailedText: response.data.signal.description,
-          detailedTextDutch, detailedTextFrench, frenchId, dutchId,
-          languages: response.data.languages.map(item => {
-            return {
-              label: item.name,
-              key: item.id,
-              value: item.id
-            }
-          }),
-          selectedLanguages: response.data.signal.translations.map(item => {
-            return { value: item.language.id, key: item.language.id, label: item.language.name }
-          }),
+          category_id: response.data.quiz.category_id,
+          age_id: response.data.quiz.age_id,
+          title: response.data.quiz.name,
+          questions: response.data.quiz.questions,
+          quizType: response.data.quiz.type,
+          // optionsImages,
+          // questionImages,
+          quizId: response.data.quiz._id,
           spinning: false,
         })
       }
@@ -168,11 +155,27 @@ export default class UpdateSignal extends Component {
     questions[index].duration = {
       ...duration
     }
+  };
+  closeModal = (duration, index) => {
+    this.setState({
+      isOpen: false
+    })
+    this.questionDurationChangeHandler(duration, index)
+  }
+  openModal = () => {
+    this.setState({
+      isOpen: true
+    })
+  }
+  questionDurationChangeHandler = (duration, index) => {
+    let questions = this.state.questions
+    questions[index].duration = {
+      ...duration
+    }
     this.setState({
       questions: questions
     })
   }
-
   updateQuiz = async (e) => {
     e.preventDefault();
     const {
@@ -185,7 +188,7 @@ export default class UpdateSignal extends Component {
       questionImages,
       quizId,
     } = this.state;
-    let validation = this.handleValidation()
+    let validation = { status: true }
     if (validation.status) {
       this.setState({ loading: true });
       const data = new FormData();
@@ -203,7 +206,22 @@ export default class UpdateSignal extends Component {
         data.append(question.key, question.value)
         return null
       })
-
+      let response = await ApiCall.post(Url.UPDATE_QUESTION,
+        data, await multipartConfig());
+      if (response.status === 200) {
+        this.setState(initialState);
+        this.props.history.push('/app/question/view')
+        return NotificationManager.success(
+          "Quiz Updated Successfully",
+          "Success",
+          3000,
+          null,
+          null,
+          'filled'
+        );
+      } else {
+        this.setState({ loading: false });
+      }
     }
   }
   handleInputChange = (e) => {
@@ -681,5 +699,167 @@ export default class UpdateSignal extends Component {
       };
 
     }
+  };
+  //duraton state
+  handleDuration = (index) => (duration) => {
+
+
+    const { hours, minutes, seconds } = duration;
+    let questions = this.state.questions;
+    questions[index].duration = { hours, minutes, seconds };
+    this.setState({
+      questions: questions
+    })
+
+    // this.setState({ hours, minutes, seconds });
+  };
+
+  render() {
+    const {
+      category_id,
+      ages,
+      categories,
+      age_id,
+      loading,
+      title,
+
+    } = this.state;
+    return (
+      <Fragment>
+        <Row>
+          <Colxx xxs="12">
+            <div className="text-zero top-right-button-container">
+              <Link to='/app/question/edit/id'><Button size='lg' color={'secondary'}><IntlMessages
+                id={"menu.cancel"} /></Button></Link>
+            </div>
+            <Breadcrumb heading="Update Quiz" match={this.props.match} />
+            <Separator className="mb-5" />
+          </Colxx>
+        </Row>
+        {loading ? <div className='loading' /> :
+          <Row>
+            <Col xxs="10">
+              <div className='col-sm-12 col-lg-10 col-xs-12 '>
+                <Card>
+                  <div className="position-absolute card-top-buttons">
+                  </div>
+                  <CardBody>
+                    <CardTitle>
+                      Update Quiz questions
+                    </CardTitle>
+                    <Form className="dashboard-quick-post" onSubmit={this.updateQuiz}>
+
+                      <FormGroup row>
+                        <Label sm="3">
+                          Name
+                        </Label>
+                        <Colxx sm="9">
+                          <Input type="text" value={title} onChange={this.handleInputChange}
+                            name="title" placeholder={'Enter quiz name *'} required />
+                        </Colxx>
+                      </FormGroup>
+                      {/* <Col xs='10'> */}
+                      <FormGroup row>
+                        <Label sm="3">Quiz Type</Label>
+                        <Colxx sm="9">
+                          <select
+                            name="select"
+                            className="form-control"
+                            value={this.state.quizType}
+                            onChange={(e) => this.setState({ quizType: e.target.value })}
+                          >
+                            <option value='null'>Select an option..</option>
+                            <option value='maths'>Maths</option>
+                            <option value='science'>Science</option>
+                          </select>
+                        </Colxx>
+                      </FormGroup>
+                      {/* </Col> */}
+                      <FormGroup row>
+                        <Label sm="3">
+                          Select category
+                        </Label>
+                        <Colxx sm="9">
+                          <select
+                            name="select"
+                            className="form-control"
+                            value={category_id}
+                            onChange={this.handleSelectedCategories}
+                          >
+                            <option value='null'>Select an option..</option>
+                            {
+                              categories.map((item) => {
+                                return (
+                                  <option key={item._id}
+                                    value={item._id}>{item.name}</option>
+                                )
+                              })
+                            }
+
+                          </select>
+                        </Colxx>
+                      </FormGroup>
+                      <FormGroup row>
+                        <Label sm="3">
+                          Select Age
+                        </Label>
+                        <Colxx sm="9">
+                          <select
+                            name="select"
+                            className="form-control"
+                            value={age_id}
+                            onChange={this.handleSelectedAges}
+                          >
+                            <option value='null'>Select an option..</option>
+                            {
+                              ages.map((item) => {
+                                return (
+                                  <option key={item._id}
+                                    value={item._id}>{item.name}</option>
+                                )
+                              })
+                            }
+
+                          </select>
+                        </Colxx>
+                      </FormGroup>
+
+
+                      <FormGroup row>
+                        <Label sm="3">
+                          Add Question
+                        </Label>
+
+                        <Colxx sm="9">
+                          {this.AddQuestionsList()}
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={() => this.addQuestionsListInput()}
+                          >
+                            Add new Question
+                          </button>
+                        </Colxx>
+                      </FormGroup>
+                      <Button
+                        style={{ width: '100%' }}
+                        className={`float-right btn-shadow btn-multiple-state ${this.state.loading ? "show-spinner" : ""}`}
+                        color="primary" disabled={this.state.loading}>
+                        <span className="spinner d-inline-block">
+                          <span className="bounce1" />
+                          <span className="bounce2" />
+                          <span className="bounce3" />
+                        </span>
+                        <span className="label"><IntlMessages id="update" /></span>
+                      </Button>
+                    </Form>
+                  </CardBody>
+                </Card>
+              </div>
+            </Col>
+
+          </Row>}
+      </Fragment>
+    )
   }
 }
