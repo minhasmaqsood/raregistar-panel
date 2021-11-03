@@ -1,27 +1,27 @@
-import React, {Component, Fragment} from "react";
-import {Button, Card, CardBody, CardTitle, Col, CustomInput, Form, FormGroup, Input, Label, Row} from "reactstrap";
+import React, { Component, Fragment } from "react";
+import { Button, Card, CardBody, CardTitle, Col, CustomInput, Form, FormGroup, Input, Label, Row } from "reactstrap";
 import IntlMessages from "../../../helpers/IntlMessages";
-import {Colxx, Separator} from "../../../components/common/CustomBootstrap";
+import { Colxx, Separator } from "../../../components/common/CustomBootstrap";
 import Breadcrumb from "../../../containers/navs/Breadcrumb";
 import ApiCall from '../../../config/network';
 import Url from '../../../config/api';
-import {NotificationManager} from "../../../components/common/react-notifications";
-import {config} from "../../../config/env";
+import { NotificationManager } from "../../../components/common/react-notifications";
+import { config } from "../../../config/env";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from "moment";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import "react-quill/dist/quill.snow.css";
 import 'react-quill/dist/quill.bubble.css';
 import DropzoneExample from "../../../containers/forms/DropzoneExample";
-
+import TextEditor from '../../../components/TextEditor/TextEditor'
 const quillModules = {
     toolbar: [
         ["bold", "italic", "underline", "strike", "blockquote"],
         [
-            {list: "ordered"},
-            {list: "bullet"},
-            {indent: "-1"},
-            {indent: "+1"}
+            { list: "ordered" },
+            { list: "bullet" },
+            { indent: "-1" },
+            { indent: "+1" }
         ],
         ["link", "image"],
         ["clean"]
@@ -63,7 +63,8 @@ const initialState = {
     openedDateTime: moment(),
     languages: [],
     detailedText: '',
-    loading: false
+    loading: false,
+    quizType: ''
 }
 export default class CreateSignal extends Component {
     constructor(props) {
@@ -78,21 +79,21 @@ export default class CreateSignal extends Component {
     };
 
     getAllAges = async () => {
-        this.setState({spinning: true});
+        this.setState({ spinning: true });
         if (!this._isMounted) {
             let response = await ApiCall.get(Url.ALL_AGE, await config())
             if (response.status === 200) {
-                this.setState({ages: response.data.ages.reverse(), spinning: false});
+                this.setState({ ages: response.data.ages.reverse(), spinning: false });
             }
         }
     };
     getAllCategories = async () => {
-        this.setState({spinning: true});
+        this.setState({ spinning: true });
         if (!this._isMounted) {
             let response = await ApiCall.get(Url.ALL_CATEGORY, await config())
 
             if (response.status === 200) {
-                this.setState({categories: response.data.categories.reverse(), spinning: false});
+                this.setState({ categories: response.data.categories.reverse(), spinning: false });
             }
         }
     };
@@ -107,15 +108,18 @@ export default class CreateSignal extends Component {
             age_id,
             title,
             questions,
+            quizType
         } = this.state;
         let validation = this.handleValidation()
         if (validation.status) {
-            this.setState({loading: true});
+            this.setState({ loading: true });
             const data = new FormData();
-            data.append('', category_id)
-            data.append('', age_id)
-            data.append('', title)
-            data.append('', JSON.stringify(questions))
+            data.append('name', title)
+            data.append('type', quizType)
+            data.append('category_id', category_id)
+            data.append('age_id', age_id)
+            data.append('questions', JSON.stringify(questions))
+
             let response = await ApiCall.post(Url.CREATE_QUESTION, data, await config());
             if (response.status === 200) {
                 this.setState(initialState);
@@ -129,7 +133,7 @@ export default class CreateSignal extends Component {
                     'filled'
                 );
             } else {
-                this.setState({loading: false});
+                this.setState({ loading: false });
             }
         } else {
             return NotificationManager.error(
@@ -173,7 +177,7 @@ export default class CreateSignal extends Component {
             category_id === '' ? categoryValidation :
                 age_id === '' ? ageValidation :
                     questions.length === 0 ? questionsValidation :
-                                            passed : titleValidation
+                        passed : titleValidation
     }
 
     handleInputChange = (e) => {
@@ -215,15 +219,15 @@ export default class CreateSignal extends Component {
             questions: questions
         })
 
-        this.setState({show: !this.state.show})
+        this.setState({ show: !this.state.show })
     };
 
 
     //questions states
     addQuestionsListInput = () => {
         // let questions = {'type_id': '', 'duration': '', 'question': [{}]};
-        let questions = {'type_id': '', 'duration': '', 'options': []};
-        this.setState(prevState => ({questions: [...prevState.questions, questions]}));
+        let questions = { 'type_id': '', 'duration': '', 'options': [] };
+        this.setState(prevState => ({ questions: [...prevState.questions, questions] }));
     };
 
     //Questions text render
@@ -249,6 +253,9 @@ export default class CreateSignal extends Component {
                                 </Colxx>
                             </FormGroup>
                         </Col>
+                        {/* <Col xs={10}>
+                        <TextEditor />
+                        </Col> */}
                         {this.state.questions[index].type_id === 'images' && (
                             <Col xs='10'>
                                 <FormGroup row>
@@ -270,8 +277,8 @@ export default class CreateSignal extends Component {
                                 <FormGroup row>
                                     <Colxx sm="12">
                                         <Input type="text" value={this.state.questions[index].question}
-                                               onChange={this.handleQuestionsText(index)} name='question'
-                                               placeholder={'Enter your question *'} required/>
+                                            onChange={this.handleQuestionsText(index)} name='question'
+                                            placeholder={'Enter your question *'} required />
                                     </Colxx>
                                 </FormGroup>
                             </Col>
@@ -324,11 +331,11 @@ export default class CreateSignal extends Component {
 
     // options state
     addOptionsListInput = (index) => {
-        let option = {'type': '', 'value': '', isAnswer: false};
+        let option = { 'type': '', 'value': '', isAnswer: false };
         const questions = this.state.questions
 
         questions[index].options.push(option)
-        this.setState(prevState => ({...prevState, questions}));
+        this.setState(prevState => ({ ...prevState, questions }));
     }
 
     handleOptionTypeChange = (event, index, index2) => {
@@ -340,7 +347,7 @@ export default class CreateSignal extends Component {
             })
         } else {
             questions[index].options[index2].type = ''
-            this.setState({questions: questions})
+            this.setState({ questions: questions })
         }
     }
 
@@ -415,10 +422,10 @@ export default class CreateSignal extends Component {
                                     </Label>
                                     <Colxx sm="12">
                                         <Input type="text" value={this.state.questions[index].options[index2].value}
-                                               onChange={(event) => this.handleOptionsText(event, index, index2)}
-                                               name="option-1"
-                                               required
-                                               placeholder={'Enter first option *'} required/>
+                                            onChange={(event) => this.handleOptionsText(event, index, index2)}
+                                            name="option-1"
+                                            required
+                                            placeholder={'Enter first option *'} required />
                                     </Colxx>
                                 </FormGroup>
                             </Col>
@@ -484,12 +491,12 @@ export default class CreateSignal extends Component {
     removeQuestion = (index) => {
         let questions = [...this.state.questions];
         questions.splice(index, 1);
-        this.setState({questions});
+        this.setState({ questions });
     };
     removeOptions = (index, index2) => {
         let questions = [...this.state.questions];
         questions[index].options.splice(index2, 1);
-        this.setState({questions});
+        this.setState({ questions });
     };
 
 
@@ -514,21 +521,21 @@ export default class CreateSignal extends Component {
     };
     handleSelectedCategories = (e) => {
         if (e.target.value !== 'null') {
-            this.setState({category_id: e.target.value})
+            this.setState({ category_id: e.target.value })
         } else {
-            this.setState({category_id: ''})
+            this.setState({ category_id: '' })
         }
     };
     handleSelectedAges = (e) => {
 
         if (e.target.value !== 'null') {
-            this.setState({age_id: e.target.value})
+            this.setState({ age_id: e.target.value })
         } else {
-            this.setState({age_id: ''})
+            this.setState({ age_id: '' })
         }
     };
     handleSelectedType = (e, index) => {
-        const {show} = this.state
+        const { show } = this.state
         let questions = this.state.questions;
 
         if (e.target.value !== 'null') {
@@ -538,9 +545,9 @@ export default class CreateSignal extends Component {
             })
         } else {
             questions[index].type_id = ''
-            this.setState({questions: questions})
+            this.setState({ questions: questions })
         }
-        this.setState({show: !show})
+        this.setState({ show: !show })
     };
 
 
@@ -553,16 +560,16 @@ export default class CreateSignal extends Component {
             })
         } else {
             optionList[index].questionType_id = ''
-            this.setState({optionList: optionList})
+            this.setState({ optionList: optionList })
         }
     };
     //duraton state
     handleDuration = (index) => (duration) => {
 
 
-        const {hours, minutes, seconds} = duration;
+        const { hours, minutes, seconds } = duration;
         let questions = this.state.questions;
-        questions[index].duration = {hours, minutes, seconds};
+        questions[index].duration = { hours, minutes, seconds };
         this.setState({
             questions: questions
         })
@@ -590,13 +597,13 @@ export default class CreateSignal extends Component {
                     <Colxx xxs="12">
                         <div className="text-zero top-right-button-container">
                             <Link to='/app/question/view'><Button size='lg' color={'secondary'}><IntlMessages
-                                id={"menu.cancel"}/></Button></Link>
+                                id={"menu.cancel"} /></Button></Link>
                         </div>
-                        <Breadcrumb heading="menu.create" match={this.props.match}/>
-                        <Separator className="mb-5"/>
+                        <Breadcrumb heading="menu.create" match={this.props.match} />
+                        <Separator className="mb-5" />
                     </Colxx>
                 </Row>
-                {loading ? <div className='loading'/> :
+                {loading ? <div className='loading' /> :
                     <Row>
                         <Col xxs="10">
                             <div className='col-sm-12 col-lg-10 col-xs-12 '>
@@ -614,9 +621,26 @@ export default class CreateSignal extends Component {
                                                 </Label>
                                                 <Colxx sm="9">
                                                     <Input type="text" value={title} onChange={this.handleInputChange}
-                                                           name="title" placeholder={'Enter quiz name *'} required/>
+                                                        name="title" placeholder={'Enter quiz name *'} required />
                                                 </Colxx>
                                             </FormGroup>
+                                            {/* <Col xs='10'> */}
+                                            <FormGroup row>
+                                                <Label sm="3">Quiz Type</Label>
+                                                <Colxx sm="9">
+                                                    <select
+                                                        name="select"
+                                                        className="form-control"
+                                                        value={this.state.quizType}
+                                                        onChange={(e) => this.setState({ quizType: e.target.value })}
+                                                    >
+                                                        <option value='null'>Select an option..</option>
+                                                        <option value='maths'>Maths</option>
+                                                        <option value='science'>Science</option>
+                                                    </select>
+                                                </Colxx>
+                                            </FormGroup>
+                                            {/* </Col> */}
                                             <FormGroup row>
                                                 <Label sm="3">
                                                     Select category
@@ -633,7 +657,7 @@ export default class CreateSignal extends Component {
                                                             categories.map((item) => {
                                                                 return (
                                                                     <option key={item._id}
-                                                                            value={item._id}>{item.name}</option>
+                                                                        value={item._id}>{item.name}</option>
                                                                 )
                                                             })
                                                         }
@@ -657,7 +681,7 @@ export default class CreateSignal extends Component {
                                                             ages.map((item) => {
                                                                 return (
                                                                     <option key={item._id}
-                                                                            value={item._id}>{item.name}</option>
+                                                                        value={item._id}>{item.name}</option>
                                                                 )
                                                             })
                                                         }
@@ -687,12 +711,12 @@ export default class CreateSignal extends Component {
                                             <Button
                                                 className={`float-right btn-shadow btn-multiple-state ${this.state.loading ? "show-spinner" : ""}`}
                                                 color="primary" disabled={this.state.loading}>
-                                        <span className="spinner d-inline-block">
-                          <span className="bounce1"/>
-                          <span className="bounce2"/>
-                          <span className="bounce3"/>
-                        </span>
-                                                <span className="label"><IntlMessages id="partner.create"/></span>
+                                                <span className="spinner d-inline-block">
+                                                    <span className="bounce1" />
+                                                    <span className="bounce2" />
+                                                    <span className="bounce3" />
+                                                </span>
+                                                <span className="label"><IntlMessages id="partner.create" /></span>
                                             </Button>
                                         </Form>
                                     </CardBody>
