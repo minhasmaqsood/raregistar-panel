@@ -35,8 +35,8 @@ export default {
     CREATE_QUESTION: base + '/api/quiz/store',
     UPDATE_QUESTION: base + '/api/quiz/update',
     DELETE_QUESTION: base + '/api/question/delete',
-    SINGLE_QUESTION: base + '/api/question/single',
-    ALL_QUESTION: base + '/api/question/view',
+    SINGLE_QUESTION: base + '/api/quiz/single',
+    ALL_QUESTION: base + '/api/quiz/getAll',
 
     //advert
     CREATE_ADVERT: base + '/api/ad/store',

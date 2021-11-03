@@ -1,23 +1,23 @@
 import React, { Component, Fragment } from "react";
-import {Row, Col, CardBody, CardTitle,  Card, Button, Badge} from "reactstrap";
+import { Row, Col, CardBody, CardTitle, Card, Button, Badge } from "reactstrap";
 import IntlMessages from "../../../helpers/IntlMessages";
 import { Colxx, Separator } from "../../../components/common/CustomBootstrap";
 import Breadcrumb from "../../../containers/navs/Breadcrumb";
 import ApiCall from '../../../config/network';
 import Url from '../../../config/api';
 import { NotificationManager } from "../../../components/common/react-notifications";
-import {config} from "../../../config/env";
+import { config } from "../../../config/env";
 import { confirmAlert } from 'react-confirm-alert';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import moment from "moment";
-import {Table} from "rsuite";
+import { Table } from "rsuite";
 import '../table.css';
 const { Column, HeaderCell, Cell, Pagination } = Table;
-export default class VIPSignals extends Component {
+export default class Quizzes extends Component {
     constructor() {
         super();
         this.state = {
-            signals: [],
+            Quizzes: [],
             spinning: false,
             //Pagination
             displayLength: 10,
@@ -28,15 +28,15 @@ export default class VIPSignals extends Component {
 
     componentDidMount() {
         this._isMounted = false
-        this.getAllSignals();
+        this.getAllQuizzes();
     };
-    getAllSignals = async ()=> {
-        this.setState({spinning: true});
-        if(!this._isMounted){
-            let response = await ApiCall.get(Url.VIP_SIGNALS, await config())
-            if(response.status=== 200){
+    getAllQuizzes = async () => {
+        this.setState({ spinning: true });
+        if (!this._isMounted) {
+            let response = await ApiCall.get(Url.ALL_QUESTION, await config())
+            if (response.status === 200) {
                 // console.log(response)
-                this.setState({signals: response.data.signal.reverse(), spinning: false});
+                this.setState({ Quizzes: response.data.allResults.reverse(), spinning: false });
             }
         }
 
@@ -45,7 +45,7 @@ export default class VIPSignals extends Component {
         this._isMounted = true
     }
 
-    changeStatus  =  (item) => {
+    changeStatus = (item) => {
         confirmAlert({
             title: 'Confirmation!',
             message: 'Are you sure you want to Delete?',
@@ -63,14 +63,14 @@ export default class VIPSignals extends Component {
 
 
     confirmChangeStatus = async (item) => {
-        this.setState({spinning: true});
+        this.setState({ spinning: true });
         let response = await ApiCall.post(Url.VIP_SIGNAL_DELETE, {
             id: item.id,
         }, await config());
-        if(response.status === 200){
-            this.setState({spinning: false});
-            this.getAllSignals();
-            return  NotificationManager.success(
+        if (response.status === 200) {
+            this.setState({ spinning: false });
+            this.getAllQuizzes();
+            return NotificationManager.success(
                 "Signal deleted Successfully",
                 "Success",
                 3000,
@@ -81,21 +81,21 @@ export default class VIPSignals extends Component {
         }
 
     };
-    handleChangePage=(dataKey)=> {
+    handleChangePage = (dataKey) => {
         // console.log(dataKey)
         this.setState({
             page: dataKey
         });
     };
-    handleChangeLength=(dataKey)=> {
+    handleChangeLength = (dataKey) => {
         this.setState({
             page: 1,
             displayLength: dataKey
         });
     };
-    getData =() => {
+    getData = () => {
         const { displayLength, page } = this.state;
-        return this.state.signals.filter((v, i) => {
+        return this.state.Quizzes.filter((v, i) => {
             const start = displayLength * (page - 1);
             const end = start + displayLength;
             return i >= start && i < end;
@@ -120,59 +120,69 @@ export default class VIPSignals extends Component {
                         <Card className="h-100">
                             <CardBody>
                                 <CardTitle>
-                                    <IntlMessages id={"signals"} />
+                                    <IntlMessages id={"Quizzes"} />
                                 </CardTitle>
                                 <Table autoHeight={true}
-                                       data={data}
-                                       bordered
-                                       cellBordered
-                                       virtualized={false}
-                                       hover={true}
-                                       loading={this.state.spinning}
+                                    data={data}
+                                    bordered
+                                    cellBordered
+                                    virtualized={false}
+                                    hover={true}
+                                    loading={this.state.spinning}
                                 >
                                     <Column width={50} fixed align="center">
                                         <HeaderCell>No</HeaderCell>
                                         <Cell>
                                             {(rowData, rowIndex) => {
-                                                return <span>{rowIndex +1}</span>
+                                                return <span>{rowIndex + 1}</span>
                                             }}
                                         </Cell>
                                     </Column>
 
-                                    <Column minWidth={200}  flexGrow={1} align="center">
+                                    <Column minWidth={200} flexGrow={1} align="center">
                                         <HeaderCell>Title</HeaderCell>
                                         <Cell>
                                             {(rowData, rowIndex) => {
-                                                return <span>{rowData.title}</span>
+                                                return <span>{rowData.name}</span>
                                             }}
                                         </Cell>
                                     </Column>
-                                    <Column minWidth={200}  flexGrow={1} align="center">
-                                        <HeaderCell>Opened Date</HeaderCell>
+                                    <Column minWidth={200} flexGrow={1} align="center">
+                                        <HeaderCell>Type</HeaderCell>
+                                        <Cell>
+                                            {(rowData, rowIndex) => {
+                                                return <span>{rowData.type}</span>
+                                            }}
+                                        </Cell>
+                                    </Column>
+                                    <Column minWidth={200} flexGrow={1} align="center">
+                                        <HeaderCell>Total Questions</HeaderCell>
+                                        <Cell>
+                                            {(rowData) => {
+                                                return <span>{rowData.questions.length} </span>
+                                            }}
+                                        </Cell>
+                                    </Column>
+
+                                    <Column minWidth={200} flexGrow={1} align="center">
+                                        <HeaderCell>Created At</HeaderCell>
                                         <Cell>
                                             {(rowData, rowIndex) => {
                                                 return <span>{moment(rowData.openDate).format('MMMM Do YYYY, h:mm:ss a')}</span>
                                             }}
                                         </Cell>
                                     </Column>
-                                    <Column minWidth={200}  flexGrow={1} align="center">
-                                        <HeaderCell>Closed/Open</HeaderCell>
-                                        <Cell>
-                                            {(rowData, rowIndex) => {
-                                                return <Badge color={rowData.isOpened === 0 ?'danger': 'success'}>{rowData.isOpened === 0? "Closed": "Open"}</Badge>
-                                            }}
-                                        </Cell>
-                                    </Column>
-                                    <Column minWidth={200}  flexGrow={1} align="center">
+
+                                    <Column minWidth={200} flexGrow={1} align="center">
                                         <HeaderCell>Actions</HeaderCell>
                                         <Cell>
                                             {(rowData, rowIndex) => {
                                                 return <div>
                                                     <Button color="secondary" size="xs" className="mb-2">
-                                                        <Link to={`/app/vip-signals/edit/${rowData.id}`} style={{color: 'white'}}><IntlMessages id="edit" /></Link>
+                                                        <Link to={`/app/question/edit/${rowData._id}`} style={{ color: 'white' }}><IntlMessages id="edit" /></Link>
                                                     </Button>
                                                     {" "}{" "}
-                                                    <Button color="danger" size="xs" className="mb-2" onClick={()=> this.changeStatus(rowData)}>
+                                                    <Button color="danger" size="xs" className="mb-2" onClick={() => this.changeStatus(rowData)}>
                                                         <IntlMessages id="delete" />
                                                     </Button>
                                                 </div>
@@ -193,7 +203,7 @@ export default class VIPSignals extends Component {
                                     ]}
                                     activePage={this.state.page}
                                     displayLength={this.state.displayLength}
-                                    total={this.state.signals.length}
+                                    total={this.state.Quizzes.length}
                                     onChangePage={this.handleChangePage}
                                     onChangeLength={this.handleChangeLength}
                                 />

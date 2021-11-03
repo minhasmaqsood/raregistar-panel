@@ -16,8 +16,8 @@ import Breadcrumb from "../../../containers/navs/Breadcrumb";
 import ApiCall from '../../../config/network';
 import Url from '../../../config/api';
 import { NotificationManager } from "../../../components/common/react-notifications";
-import {config, multipartConfig} from "../../../config/env";
-import {Link} from "react-router-dom";
+import { config, multipartConfig } from "../../../config/env";
+import { Link } from "react-router-dom";
 import DropzoneExample from "../../../containers/forms/DropzoneExample";
 
 const initialState = {
@@ -25,7 +25,9 @@ const initialState = {
     selectedType: '',
     loading: false,
     // url: '',
-    image: ''
+    image: '',
+    description: '',
+    price: ''
 }
 export default class CreateCategory extends Component {
     constructor(props) {
@@ -33,7 +35,7 @@ export default class CreateCategory extends Component {
         this.state = initialState;
     };
     handleValidation = () => {
-        const {name, image} = this.state;
+        const { name, image } = this.state;
         let nameValidation = {
             message: 'Name is Required',
             status: false
@@ -45,44 +47,44 @@ export default class CreateCategory extends Component {
         let passed = {
             status: true
         };
-        return name !== ''?
-            image === ''? ImageValidation :
+        return name !== '' ?
+            image === '' ? ImageValidation :
                 passed : nameValidation
     }
-    createCategory = async (e)=> {
+    createCategory = async (e) => {
         e.preventDefault();
-        const {image,name} = this.state;
+        const { image, name, description, price } = this.state;
         let validation = this.handleValidation();
-        if(validation.status){
-        const data = new FormData();
-        data.append('name',name)
-        data.append('image',image)
-                this.setState({loading: true});
-                let response = await ApiCall.post(Url.CREATE_CATEGORY, data, await multipartConfig());
-                console.log(response,'respponse')
-                if (response.status === 200) {
-                    this.setState(initialState);
-                    this.props.history.push('/app/categories/view')
-                    return NotificationManager.success(
-                        "Category Stored Successfully",
-                        "Success",
-                        3000,
-                        null,
-                        null,
-                        'filled'
-                    );
-                } else {
-                    this.setState({loading: false});
-                }
+        if (validation.status) {
+            const data = new FormData();
+            data.append('name', name)
+            data.append('image', image)
+            this.setState({ loading: true });
+            let response = await ApiCall.post(Url.CREATE_CATEGORY, data, await multipartConfig());
+            console.log(response, 'respponse')
+            if (response.status === 200) {
+                this.setState(initialState);
+                this.props.history.push('/app/categories/view')
+                return NotificationManager.success(
+                    "Category Stored Successfully",
+                    "Success",
+                    3000,
+                    null,
+                    null,
+                    'filled'
+                );
+            } else {
+                this.setState({ loading: false });
             }
+        }
     };
     onImageChange = (file) => {
         this.setState({
             image: file
         })
     };
-    onFileRemove = (item)=>{
-        if(item){
+    onFileRemove = (item) => {
+        if (item) {
             this.setState({
                 image: '',
                 // url: ''
@@ -97,7 +99,7 @@ export default class CreateCategory extends Component {
 
 
     render() {
-        const {name, selectedType} = this.state;
+        const { name, description, price } = this.state;
         return (
             <Fragment>
                 <Row>
@@ -112,47 +114,63 @@ export default class CreateCategory extends Component {
                 <Row>
                     <Col xxs="10">
                         <div className='col-sm-12 col-lg-10 col-xs-12 '>
-                        <Card>
-                            <div className="position-absolute card-top-buttons">
-                            </div>
-                            <CardBody>
-                                <CardTitle>
-                                    <IntlMessages id="categories-create" />
-                                </CardTitle>
-                                <Form className="dashboard-quick-post" onSubmit={this.createCategory}>
-                                    <FormGroup row>
-                                        <Label sm="3">
-                                            <IntlMessages id="name" />
-                                        </Label>
-                                        <Colxx sm="9">
-                                            <Input type="text" value={name} onChange={this.handleInputChange} name="name" placeholder={'Name of category *'} required/>
-                                        </Colxx>
-                                    </FormGroup>
-                                    <FormGroup row>
-                                        <Label sm="3">
-                                            {/*<IntlMessages id="categories-type"/>*/}
-                                            Image
-                                        </Label>
-                                        <Colxx sm="9">
-                                            <DropzoneExample
-                                                fileTypes={'image/*'}
-                                                url={this.state.url}
-                                                removeFile={this.onFileRemove}
-                                                onChange={this.onImageChange}
-                                            />
-                                        </Colxx>
-                                    </FormGroup>
-                                    <Button className={`float-right btn-shadow btn-multiple-state ${this.state.loading ? "show-spinner" : ""}`} color="primary" disabled={this.state.loading}>
-                                        <span className="spinner d-inline-block">
-                          <span className="bounce1" />
-                          <span className="bounce2" />
-                          <span className="bounce3" />
-                        </span>
-                                        <span className="label"><IntlMessages id="categories-create" /></span>
-                                    </Button>
-                                </Form>
-                            </CardBody>
-                        </Card>
+                            <Card>
+                                <div className="position-absolute card-top-buttons">
+                                </div>
+                                <CardBody>
+                                    <CardTitle>
+                                        <IntlMessages id="categories-create" />
+                                    </CardTitle>
+                                    <Form className="dashboard-quick-post" onSubmit={this.createCategory}>
+                                        <FormGroup row>
+                                            <Label sm="3">
+                                                <IntlMessages id="name" />
+                                            </Label>
+                                            <Colxx sm="9">
+                                                <Input type="text" value={name} onChange={this.handleInputChange} name="name" placeholder={'Name of category *'} required />
+                                            </Colxx>
+                                        </FormGroup>
+                                        <FormGroup row>
+                                            <Label sm="3">
+                                                <IntlMessages id="name" />
+                                            </Label>
+                                            <Colxx sm="9">
+                                                <Input type="text" value={description} onChange={this.handleInputChange} name="description" placeholder={'Description'} required />
+                                            </Colxx>
+                                        </FormGroup>
+                                        <FormGroup row>
+                                            <Label sm="3">
+                                                <IntlMessages id="name" />
+                                            </Label>
+                                            <Colxx sm="9">
+                                                <Input type="text" value={price} onChange={this.handleInputChange} name="price" placeholder={'Price *'} required />
+                                            </Colxx>
+                                        </FormGroup>
+                                        <FormGroup row>
+                                            <Label sm="3">
+                                                {/*<IntlMessages id="categories-type"/>*/}
+                                                Image
+                                            </Label>
+                                            <Colxx sm="9">
+                                                <DropzoneExample
+                                                    fileTypes={'image/*'}
+                                                    url={this.state.url}
+                                                    removeFile={this.onFileRemove}
+                                                    onChange={this.onImageChange}
+                                                />
+                                            </Colxx>
+                                        </FormGroup>
+                                        <Button className={`float-right btn-shadow btn-multiple-state ${this.state.loading ? "show-spinner" : ""}`} color="primary" disabled={this.state.loading}>
+                                            <span className="spinner d-inline-block">
+                                                <span className="bounce1" />
+                                                <span className="bounce2" />
+                                                <span className="bounce3" />
+                                            </span>
+                                            <span className="label"><IntlMessages id="categories-create" /></span>
+                                        </Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>
                         </div>
                     </Col>
 
