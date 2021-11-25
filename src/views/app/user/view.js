@@ -107,9 +107,9 @@ console.log(response)
                     <Colxx xxs="12">
 
                         <div className="text-zero top-right-button-container">
-                            <Link to='/app/organization/create'><Button size='lg' color={'secondary'}><IntlMessages id={"menu.create"} /></Button></Link>
+                            <Link to='/app/user/create'><Button size='lg' color={'secondary'}><IntlMessages id={"menu.create"} /></Button></Link>
                         </div>
-                        <Breadcrumb heading="ageName-view" match={this.props.match} />
+                        <Breadcrumb heading="user-view" match={this.props.match} />
                         <Separator className="mb-5" />
                     </Colxx>
                 </Row>
