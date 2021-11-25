@@ -90,7 +90,7 @@ export default class CreateOrganization extends Component {
             data.append('password',password)
             data.append('phone_number',phoneNumber)
             data.append('image',image)
-
+            console.log(password)
             if(password !== confirmPassword){
                 window.alert("The passwords doesn't match")
                 return false;
