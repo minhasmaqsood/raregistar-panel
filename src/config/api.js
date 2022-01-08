@@ -50,6 +50,7 @@ export default {
     UPDATE_ADMIN_PROFILE: base + '/api/admin/profile/update',
     //Users
     USER_STORE: base + '/api/admin/users/store',
+    USER_DELETE: base + '/api/admin/users/delete',
     USER_UPDATE: base + '/api/admin/users/update',
     USER_EDIT: base + '/api/admin/users/edit',
     ALL_USERS: base + '/api/admin/users',

@@ -7,10 +7,11 @@ import ApiCall from '../../../config/network';
 import Url from '../../../config/api';
 // import { NotificationManager } from "../../../components/common/react-notifications";
 import {config} from "../../../config/env";
-// import { confirmAlert } from 'react-confirm-alert';
+import { confirmAlert } from 'react-confirm-alert';
 import {Link} from "react-router-dom";
 import {Table} from "rsuite";
 import '../table.css';
+import { NotificationManager } from "../../../components/common/react-notifications";
 
 const { Column, HeaderCell, Cell, Pagination } = Table;
 export default class UsersView extends Component {
@@ -48,42 +49,42 @@ export default class UsersView extends Component {
         this._isMounted = true
     }
 
-    // changeStatus  =  (item) => {
-    //     confirmAlert({
-    //         title: 'Confirmation!',
-    //         message: 'Are you sure you want to Delete?',
-    //         buttons: [
-    //             {
-    //                 label: 'Yes',
-    //                 onClick: () => this.confirmChangeStatus(item)
-    //             },
-    //             {
-    //                 label: "No"
-    //             }
-    //         ]
-    //     })
-    // };
+    deleteUser  =  (item) => {
+        confirmAlert({
+            title: 'Confirmation!',
+            message: 'Are you sure you want to Delete?',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.deleteUserConfirmed(item)
+                },
+                {
+                    label: "No"
+                }
+            ]
+        })
+    };
     //
     //
-    // confirmChangeStatus = async (item) => {
-    //     this.setState({spinning: true});
-    //     let response = await ApiCall.post(Url.USER_DELETE, {
-    //         id: item.id,
-    //     }, await config());
-    //     if(response.status === 200){
-    //         this.setState({spinning: false});
-    //         this.getAllUsers();
-    //         return  NotificationManager.success(
-    //             "User deleted Successfully",
-    //             "Success",
-    //             3000,
-    //             null,
-    //             null,
-    //             'filled'
-    //         );
-    //     }
-    //
-    // };
+    deleteUserConfirmed = async (item) => {
+        this.setState({spinning: true});
+        let response = await ApiCall.post(Url.USER_DELETE, {
+            id: item.id,
+        }, await config());
+        if(response.status === 200){
+            this.setState({spinning: false});
+            this.getAllUsers();
+            return  NotificationManager.success(
+                "User deleted Successfully",
+                "Success",
+                3000,
+                null,
+                null,
+                'filled'
+            );
+        }
+    
+    };
     handleChangePage=(dataKey)=> {
         // console.log(dataKey)
         this.setState({
@@ -178,9 +179,9 @@ export default class UsersView extends Component {
                                                         <Link to={`/app/users/edit/${rowData.id}`} style={{color: 'white'}}><IntlMessages id="edit" /></Link>
                                                     </Button>
                                                     {/*{" "}{" "}*/}
-                                                    {/*<Button color="danger" size="xs" className="mb-2" onClick={()=> this.changeStatus(rowData)}>*/}
-                                                    {/*    <IntlMessages id="delete" />*/}
-                                                    {/*</Button>*/}
+                                                    <Button color="danger" size="xs" className="mb-2" onClick={()=> this.deleteUser(rowData)}>
+                                                       <IntlMessages id="delete" />
+                                                    </Button>
                                                 </div>
                                             }}
                                         </Cell>

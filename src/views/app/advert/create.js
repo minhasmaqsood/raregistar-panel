@@ -26,7 +26,7 @@ const initialState = {
     organization_id: '',
     start_time:'',
     end_time:'',
-    amount:'',
+    amount:'0',
     organizations:[],
     desktop_images:'',
     tablets_images:'',
@@ -257,7 +257,7 @@ export default class CreateCategory extends Component {
                                         </Colxx>
                                     </FormGroup>
                                     {/*amount */}
-                                    <FormGroup row>
+                                    <FormGroup row style={{display:'none'}}>
                                         <Label sm="3">
                                             Amount
                                         </Label>

@@ -51,10 +51,10 @@ export default class CreateOrganization extends Component {
             status: true
         };
         return image === ''?
-                website === '' ? websiteValidation :
                 address === '' ? AddressValidation :
                 passed : ImageValidation
     }
+
     createOrganization = async (e)=> {
         e.preventDefault();
         const {name,website,image,address} = this.state;
@@ -149,7 +149,7 @@ export default class CreateOrganization extends Component {
                                             Website
                                         </Label>
                                         <Colxx sm="9">
-                                            <Input type="text" value={website} onChange={this.handleInputChange} name="website" placeholder={'Enter Website *'} required/>
+                                            <Input type="text" value={website} onChange={this.handleInputChange} name="website" placeholder={'Enter Website (optional)'}/>
                                         </Colxx>
                                     </FormGroup>
 

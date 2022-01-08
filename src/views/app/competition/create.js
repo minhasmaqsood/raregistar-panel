@@ -75,7 +75,7 @@ export default class CreateOrganization extends Component {
     getAllQuizzes = async () => {
         this.setState({ spinning: true });
         if (!this._isMounted) {
-            let response = await ApiCall.get(Url.ALL_QUESTIONS, await config())
+            let response = await ApiCall.get(Url.ALL_QUESTION, await config())
             console.log(response)
             if (response.status === 200) {
                 this.setState({ quizzes: response.data.allResults.reverse(), spinning: false });
@@ -113,7 +113,7 @@ export default class CreateOrganization extends Component {
             status: true
         };
         return user1_id !== '' ?
-            image === '' ? ImageValidation :
+            // image === '' ? ImageValidation :
                 user2_id === '' ? user2SelectedValidation :
                     organization1_id === '' ? organizationSelected1Validation :
                         organization2_id === '' ? organizationSelected2Validation :
@@ -386,7 +386,7 @@ export default class CreateOrganization extends Component {
                                                 </select>
                                             </Colxx>
                                         </FormGroup>
-                                        <FormGroup row>
+                                        <FormGroup row style={{display:'none'}} >
                                             <Label sm="3">
                                                 {/*<IntlMessages id="categories-type"/>*/}
                                                 Picture

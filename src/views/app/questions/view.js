@@ -147,14 +147,14 @@ export default class Quizzes extends Component {
                                             }}
                                         </Cell>
                                     </Column>
-                                    <Column minWidth={200} flexGrow={1} align="center">
+                                    {/* <Column minWidth={200} flexGrow={1} align="center">
                                         <HeaderCell>Type</HeaderCell>
                                         <Cell>
                                             {(rowData, rowIndex) => {
                                                 return <span>{rowData.type}</span>
                                             }}
                                         </Cell>
-                                    </Column>
+                                    </Column> */}
                                     <Column minWidth={200} flexGrow={1} align="center">
                                         <HeaderCell>Total Questions</HeaderCell>
                                         <Cell>

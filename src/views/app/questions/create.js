@@ -191,7 +191,7 @@ export default class CreateQuiz extends Component {
 		};
 		return title !== '' ?
 			category_id === '' ? categoryValidation :
-				age_id === '' ? ageValidation :
+				// age_id === '' ? ageValidation :
 					questions.length === 0 ? questionsValidation :
 						passed : titleValidation
 	}
@@ -780,7 +780,7 @@ export default class CreateQuiz extends Component {
 													</select>
 												</Colxx>
 											</FormGroup>
-											<FormGroup row>
+											<FormGroup row style={{display:'none'}}>
 												<Label sm="3">
 													Select Age
 												</Label>
